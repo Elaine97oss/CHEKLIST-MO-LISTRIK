@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Checklist Operasional</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
         header { background-color: #fff; padding: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
         .logo { max-width: 200px; }
-        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; flex: 1; }
         h1 { color: #cc0000; text-align: center; margin-bottom: 30px; }
         
         /* Layout Grid untuk Panduan & Keunggulan */
@@ -44,6 +44,25 @@
         .badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 0.85em; font-weight: bold; color: white; margin-right: 5px;}
         .badge-green { background-color: #198754; }
         .badge-orange { background-color: #fd7e14; }
+
+        /* Gaya Footer Baru */
+        footer {
+            background-color: #e9ecef;
+            color: #6c757d;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+            border-top: 1px solid #dee2e6;
+            margin-top: auto;
+        }
+        footer span {
+            display: inline-block;
+            margin: 0 10px;
+        }
+        @media (max-width: 768px) {
+            footer span { display: block; margin: 5px 0; }
+            footer .separator { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -137,6 +156,14 @@
             </a>
         </div>
     </div>
-</body>
 
+    <footer>
+        <span>Aplikasi Checklist Sementara</span> 
+        <span class="separator">&bull;</span> 
+        <span>Sampai My BIrawa Siap</span> 
+        <span class="separator">&bull;</span> 
+        <span>Digunakan di internal Regional V KTI</span>
+    </footer>
+
+</body>
 </html>
