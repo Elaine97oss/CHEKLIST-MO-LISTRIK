@@ -9,10 +9,10 @@
         header { background-color: #fff; padding: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
         .logo { max-width: 200px; }
         .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
-        h1 { color: #cc0000; text-align: center; margin-bottom: 40px; }
+        h1 { color: #cc0000; text-align: center; margin-bottom: 30px; }
         
         /* Layout Grid untuk Panduan & Keunggulan */
-        .info-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
+        .info-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         @media (max-width: 768px) { .info-section { grid-template-columns: 1fr; } }
         
         /* Gaya Kartu Panduan */
@@ -25,6 +25,12 @@
         .features-card h3 { margin-top: 0; color: #198754; }
         .features-card ul { padding-left: 0; line-height: 1.6; list-style-type: none; margin-bottom: 0; }
         .features-card ul li { margin-bottom: 12px; }
+
+        /* Gaya Kartu Panduan Export/Import */
+        .advanced-card { background: #fff; border-left: 5px solid #fd7e14; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 40px; }
+        .advanced-card h3 { margin-top: 0; color: #fd7e14; }
+        .advanced-card p { margin-top: 0; line-height: 1.5; }
+        .advanced-card ol { padding-left: 20px; line-height: 1.6; margin-bottom: 0; }
         
         /* Gaya Grid & Kad Menu */
         .category-title { margin-top: 20px; margin-bottom: 15px; border-bottom: 2px solid #ccc; padding-bottom: 5px; color: #555; font-size: 1.2em; }
@@ -33,37 +39,56 @@
         .card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.15); border-color: #cc0000; }
         .card-icon { font-size: 2.5em; margin-bottom: 10px; }
         .card-title { font-weight: bold; font-size: 1.1em; }
+
+        /* Label Badge untuk highlight */
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 0.85em; font-weight: bold; color: white; margin-right: 5px;}
+        .badge-green { background-color: #198754; }
+        .badge-orange { background-color: #fd7e14; }
     </style>
 </head>
 <body>
     <header>
-        <img src="https://telkomproperty.co.id/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoTelkomHeader.ff908c55.png&w=3840&q=75" alt="Logo" class="logo">
+        <img src="https://telkomproperty.co.id/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoTelkomHeader.ff908c55.png&w=3840&q=75" alt="Logo Telkom Property" class="logo">
     </header>
 
     <div class="container">
-        <h1>Portal Checklist Pemeliharaan</h1>
+        <h1>Portal Checklist MO Listrik Reg V</h1>
 
         <div class="info-section">
             <div class="tutorial-card">
-                <h3>📖 Panduan Penggunaan</h3>
+                <h3>📖 Panduan Penggunaan Dasar</h3>
                 <ol>
-                    <li><b>Pilih Form:</b> Klik menu checklist di bawah sesuai jadwal pengerjaan.</li>
-                    <li><b>Isi Data:</b> Lengkapi header form (Tanggal, Lokasi Gedung, ID Perangkat, dll).</li>
-                    <li><b>Input Bukti:</b> Isi hasil inspeksi dan unggah foto *evidence*.</li>
-                    <li><b>Cetak Laporan:</b> Klik tombol biru <b>"🖨️ Cetak PDF"</b> di pojok kanan bawah.</li>
-                    <li><b>Simpan PDF:</b> Pada jendela *Print*, atur *Destination* ke <b>Save as PDF</b> dan ukuran kertas <b>A4</b>. Klik Save.</li>
+                    <li><b>Pilih Form:</b> Klik menu checklist di bawah sesuai jadwal.</li>
+                    <li><b>Isi Data & Bukti:</b> Lengkapi data teks dan unggah foto evidence. <i>(Data Anda otomatis tersimpan di HP/PC yang sedang digunakan).</i></li>
+                    <li><b>Validasi:</b> Jika ada kotak berwarna <span style="color:red; font-weight:bold;">MERAH</span>, berarti kolom/foto tersebut belum diisi.</li>
+                    <li><b>Cetak Laporan:</b> Klik tombol <b>"🖨️ Cetak PDF"</b>.</li>
+                    <li><b>Simpan PDF:</b> Atur *Destination/Printer* ke <b>Save as PDF</b> dan ukuran kertas <b>A4</b>.</li>
                 </ol>
             </div>
 
             <div class="features-card">
                 <h3>✨ Keunggulan Sistem</h3>
                 <ul>
-                    <li>🛡️ <b>Deteksi Foto Dobel:</b> Sistem otomatis mencegah teknisi mengunggah foto <i>evidence</i> yang sama pada item yang berbeda.</li>
-                    <li>🗜️ <b>Kompresi Cerdas:</b> Foto dari HP (berukuran MB) dikompres otomatis menjadi sangat ringan (~110 DPI) tanpa mengurangi kejelasan cetak.</li>
-                    <li>🖨️ <b>Format Cetak Presisi:</b> Layout dirancang khusus agar rapi, tabel tidak terpotong, dan pas pada ukuran kertas A4.</li>
-                    <li>⚡ <b>Cepat & Offline:</b> Bekerja murni di browser tanpa perlu server, sangat cepat, dan dapat diisi meskipun tidak ada sinyal internet.</li>
+                    <li>💾 <b>Auto-Save:</b> Mencegah data hilang jika browser tertutup.</li>
+                    <li>🔄 <b>Cross-Device:</b> Bisa dikerjakan sebagian di HP, lalu dilanjutkan & dicetak dari Komputer.</li>
+                    <li>🛡️ <b>Deteksi Foto Dobel:</b> Mencegah kecurangan/human error dalam mengunggah foto evidence yang sama.</li>
+                    <li>🗜️ <b>Kompresi Cerdas:</b> Foto besar dari HP otomatis dikompres (~110 DPI) agar PDF tetap ringan.</li>
+                    <li>⚡ <b>Offline Mode:</b> Bekerja tanpa perlu server/internet (setelah halaman terbuka).</li>
                 </ul>
             </div>
+        </div>
+
+        <div class="advanced-card">
+            <h3>🔄 Cara Lanjut Sesi di Komputer Lain (Export / Import)</h3>
+            <p>Fitur ini digunakan jika Anda ingin mengisi form dan mengunggah foto di lapangan menggunakan HP, namun ingin merapikan dan mencetak laporannya melalui Komputer/Laptop di kantor.</p>
+            <ol>
+                <li>Di HP Anda, pastikan form sudah terisi sebagian, lalu tekan tombol <span class="badge badge-green">💾 Simpan Sesi (Export)</span>.</li>
+                <li>Sebuah file dengan akhiran <b>.json</b> akan terunduh ke HP Anda.</li>
+                <li>Kirim file <b>.json</b> tersebut ke Komputer/Laptop di kantor (bisa lewat WhatsApp Web, Email, atau Kabel Data).</li>
+                <li>Di Komputer, buka web portal ini dan pilih menu form yang sama.</li>
+                <li>Tekan tombol <span class="badge badge-orange">📂 Lanjut Sesi (Import)</span>, lalu pilih file <b>.json</b> yang baru saja Anda kirim.</li>
+                <li><i>Selesai!</i> Semua ketikan dan foto Anda akan otomatis muncul kembali, siap untuk dilanjutkan atau dicetak!</li>
+            </ol>
         </div>
 
         <h2 class="category-title">Jadwal Mingguan</h2>
