@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Checklist MO Listrik Regional V</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; }
+        header { background-color: #fff; padding: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
+        .logo { max-width: 200px; }
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+        h1 { color: #cc0000; text-align: center; }
+        
+        /* Gaya Tutorial */
+        .tutorial-card { background: #fff; border-left: 5px solid #0d6efd; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .tutorial-card h3 { margin-top: 0; color: #0d6efd; }
+        .tutorial-card ol { padding-left: 20px; line-height: 1.6; }
+        
+        /* Gaya Grid & Kad Menu */
+        .category-title { margin-top: 30px; margin-bottom: 15px; border-bottom: 2px solid #ccc; padding-bottom: 5px; color: #555; font-size: 1.2em; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
+        .card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: #333; display: block; border: 1px solid #eaeaea; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.15); border-color: #cc0000; }
+        .card-icon { font-size: 2.5em; margin-bottom: 10px; }
+        .card-title { font-weight: bold; font-size: 1.1em; }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://telkomproperty.co.id/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoTelkomHeader.ff908c55.png&w=3840&q=75" alt="Logo" class="logo">
+    </header>
+
+    <div class="container">
+        <h1>Portal Checklist MO Listrik Regional V</h1>
+
+        <div class="tutorial-card">
+            <h3>📖 Panduan Penggunaan Cepat</h3>
+            <ol>
+                <li><b>Pilih Form:</b> Klik pada salah satu menu checklist di bawah sesuai jadwal pekerjaan.</li>
+                <li><b>Isi Data:</b> Lengkapi header form (Tanggal, Lokasi Gedung, ID Perangkat, dll).</li>
+                <li><b>Input Hasil & Bukti:</b> Isi hasil inspeksi dan unggah foto *evidence*. Jangan khawatir, sistem akan mengompres ukuran foto secara otomatis agar hasil cetak tetap ringan.</li>
+                <li><b>Cetak Laporan:</b> Jika semua sudah terisi, klik tombol biru <b>"🖨️ Cetak PDF"</b> di pojok kanan bawah layar.</li>
+                <li><b>Simpan PDF:</b> Pada jendela pengaturan *Print* (browser), pastikan opsi *Destination/Printer* diatur ke <b>Save as PDF</b> dan ukuran kertas adalah <b>A4</b>. Klik Save.</li>
+            </ol>
+        </div>
+
+        <h2 class="category-title">Jadwal Mingguan</h2>
+        <div class="grid">
+            <a href="GENSET_MINGGUAN.html" class="card">
+                <div class="card-icon">⚡</div>
+                <div class="card-title">Genset Mingguan</div>
+            </a>
+            <a href="MDP_SDP_MINGGUAN.html" class="card">
+                <div class="card-icon">🔌</div>
+                <div class="card-title">MDP / SDP Mingguan</div>
+            </a>
+        </div>
+
+        <h2 class="category-title">Jadual Bulanan</h2>
+        <div class="grid">
+            <a href="GENSET_BULANAN.html" class="card">
+                <div class="card-icon">⚡</div>
+                <div class="card-title">Genset Bulanan</div>
+            </a>
+            <a href="MDP_SDP_BULANAN.html" class="card">
+                <div class="card-icon">🔌</div>
+                <div class="card-title">MDP / SDP Bulanan</div>
+            </a>
+            <a href="PEMERIKSAAN_COS_ATS.html" class="card">
+                <div class="card-icon">🔄</div>
+                <div class="card-title">COS / ATS / AMF</div>
+            </a>
+            <a href="CAPACITOR_BULANAN.html" class="card">
+                <div class="card-icon">🔋</div>
+                <div class="card-title">Capacitor Bank</div>
+            </a>
+            <a href="CUBICLE_SWITCH_BULANAN.html" class="card">
+                <div class="card-icon">🎛️</div>
+                <div class="card-title">Cubicle Switch</div>
+            </a>
+            <a href="PENYALUR_PETIR_BULANAN.html" class="card">
+                <div class="card-icon">🌩️</div>
+                <div class="card-title">Penyalur Petir</div>
+            </a>
+            <a href="TRAFO_BULANAN.html" class="card">
+                <div class="card-icon">🏢</div>
+                <div class="card-title">Trafo Bulanan</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
