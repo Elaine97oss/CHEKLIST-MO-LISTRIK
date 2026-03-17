@@ -1,0 +1,144 @@
+/* =========================================================
+   FILE: style.css (Digunakan untuk semua form inspeksi)
+========================================================= */
+
+/* Pengaturan Dasar Layar */
+body { font-family: Arial, sans-serif; margin: 20px; font-size: 12px; }
+
+/* Layout Header & Logo */
+.header-container {
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    margin-bottom: 40px; 
+}
+.logo-wrapper { position: absolute; left: 0; top: 0; }
+.logo-img { max-height: 60px; max-width: 180px; object-fit: contain; }
+
+h2 { text-align: center; margin: 0; }
+
+/* Layout Tabel Informasi */
+.header-info { width: 100%; margin-bottom: 15px; }
+.header-info td { padding: 4px; border: none; }
+
+/* Layout Tabel Checklist */
+table.checklist { width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; word-wrap: break-word;}
+table.checklist, table.checklist th, table.checklist td { border: 1px solid black; }
+table.checklist th, table.checklist td { padding: 8px; vertical-align: middle; }
+table.checklist th { background-color: #f2f2f2; text-align: center; }
+
+/* Layout Tabel Catatan (Di Luar Tabel Utama) */
+table.notes-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+table.notes-table td { padding: 5px; vertical-align: top; border: none; }
+.notes-label { width: 15%; font-weight: bold; }
+.notes-colon { width: 2%; text-align: center; font-weight: bold; }
+.notes-input { width: 83%; }
+
+/* Input Dasar */
+input[type="text"], input[type="date"], select, textarea {
+    width: 100%; box-sizing: border-box; padding: 5px;
+    font-family: inherit; font-size: inherit; border: 1px solid #ccc; border-radius: 3px;
+}
+
+/* Tampilan Textarea di Layar */
+textarea {
+    resize: none; 
+    overflow: hidden; 
+    white-space: pre-wrap; 
+    word-wrap: break-word; 
+    min-height: 35px; 
+}
+
+/* Elemen Bayangan Khusus untuk Print (Jawaban & Deskripsi) */
+.print-text {
+    display: none; 
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    padding: 2px 0;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.file-input { margin-bottom: 5px; font-size: 11px; width: 100%; }
+
+/* Highlight Merah untuk Field Kosong (Validasi) */
+.error-field { border: 2px solid #dc3545 !important; background-color: #fff0f0 !important; }
+.error-img { border: 2px dashed #dc3545 !important; padding: 5px; border-radius: 5px; background-color: #fff0f0; }
+
+/* Wrapper Gambar & Tombol Hapus */
+.img-container { min-height: 30px; }
+.img-wrapper { position: relative; display: inline-block; margin-top: 5px; }
+.preview-img { max-width: 140px; height: auto; display: none; border: 1px solid #ccc; }
+.btn-remove {
+    position: absolute; top: -5px; right: -5px;
+    background: #dc3545; color: white; border: none; border-radius: 50%;
+    width: 20px; height: 20px; font-size: 12px; font-weight: bold;
+    cursor: pointer; display: none; line-height: 18px; text-align: center; padding: 0;
+}
+.btn-remove:hover { background: #c82333; }
+
+/* Pengaturan Tanda Tangan */
+.signature-table { width: 100%; border: none; margin-top: 30px; text-align: center; }
+.signature-table td { border: none; padding: 10px; }
+.input-inline {
+    border: none; border-bottom: 1px dashed #000; background: transparent;
+    font-family: inherit; font-size: inherit; text-align: center; padding: 2px;
+}
+.input-inline.bold { font-weight: bold; border-bottom: 1px solid #000; width: 80%; }
+.input-inline.normal { border-bottom: none; width: 80%; }
+
+/* ================= TATA LETAK TOMBOL ================= */
+.btn-print {
+    position: fixed; bottom: 20px; right: 20px; padding: 12px 20px;
+    background-color: #0d6efd; color: white; border: none; border-radius: 5px;
+    font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 1000;
+}
+.btn-print:hover { background-color: #0b5ed7; }
+
+.btn-reset {
+    position: fixed; bottom: 75px; right: 20px; padding: 10px 20px;
+    background-color: #6c757d; color: white; border: none; border-radius: 5px;
+    font-size: 13px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 1000;
+}
+.btn-reset:hover { background-color: #5a6268; }
+
+.btn-export {
+    position: fixed; bottom: 20px; left: 20px; padding: 10px 15px;
+    background-color: #198754; color: white; border: none; border-radius: 5px;
+    font-size: 13px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 1000;
+}
+.btn-export:hover { background-color: #157347; }
+
+.btn-import {
+    position: fixed; bottom: 65px; left: 20px; padding: 10px 15px;
+    background-color: #fd7e14; color: white; border: none; border-radius: 5px;
+    font-size: 13px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 1000;
+}
+.btn-import:hover { background-color: #e37112; }
+
+/* PENGATURAN CETAK (PRINT) */
+@media print {
+    body { margin: 0; }
+    .no-print { display: none !important; }
+    
+    .header-info input[type="text"], .header-info input[type="date"], .input-inline {
+        border: none !important; background: transparent !important;
+        appearance: none; -webkit-appearance: none; padding: 0; margin: 0;
+        color: black;
+    }
+
+    .error-field { background-color: transparent !important; border: none !important; }
+    .error-img { border: none !important; background-color: transparent !important; padding: 0; }
+    select { background-image: none !important; }
+    ::-ms-expand { display: none; }
+    @page { size: A4; margin: 10mm; }
+
+    table.checklist { width: 100% !important; table-layout: fixed !important; }
+    table.checklist th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    table.checklist td { word-wrap: break-word !important; }
+
+    table.checklist th:nth-child(3) { width: 18% !important; } 
+    table.checklist th:nth-child(4) { width: 22% !important; } 
+
+    #checklist-body .save-target { display: none !important; }
+    .print-text { display: block !important; }
+}
