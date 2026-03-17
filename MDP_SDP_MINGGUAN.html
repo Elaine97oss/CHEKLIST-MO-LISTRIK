@@ -40,6 +40,26 @@
             width: 100%; box-sizing: border-box; padding: 5px;
             font-family: inherit; font-size: inherit; border: 1px solid #ccc; border-radius: 3px;
         }
+
+        /* Tampilan Textarea di Layar */
+        textarea {
+            resize: none; 
+            overflow: hidden; 
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+            min-height: 35px; 
+        }
+
+        /* Elemen Bayangan Khusus untuk Print (Jawaban & Deskripsi) */
+        .print-text {
+            display: none; /* Sembunyikan di layar normal */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            padding: 2px 0;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
         .file-input { margin-bottom: 5px; font-size: 11px; width: 100%; }
 
         /* Highlight Merah untuk Field Kosong (Validasi) */
@@ -103,17 +123,33 @@
         @media print {
             body { margin: 0; }
             .no-print { display: none !important; }
-            input[type="text"], input[type="date"], select, textarea, .input-inline {
+            
+            /* Sembunyikan styling kotak pada tabel info atas */
+            .header-info input[type="text"], .header-info input[type="date"], .input-inline {
                 border: none !important; background: transparent !important;
                 appearance: none; -webkit-appearance: none; padding: 0; margin: 0;
-                color: black; resize: none;
+                color: black;
             }
-            .error-field { background-color: transparent !important; }
+
+            .error-field { background-color: transparent !important; border: none !important; }
             .error-img { border: none !important; background-color: transparent !important; padding: 0; }
             select { background-image: none !important; }
             ::-ms-expand { display: none; }
-            table.checklist th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             @page { size: A4; margin: 10mm; }
+
+            /* Paksa tabel tidak meluber */
+            table.checklist { width: 100% !important; table-layout: fixed !important; }
+            table.checklist th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            table.checklist td { word-wrap: break-word !important; }
+
+            /* Mengecilkan Tolak Ukur (kolom 3) dan memperbesar Jawaban (kolom 4) */
+            table.checklist th:nth-child(3) { width: 18% !important; } 
+            table.checklist th:nth-child(4) { width: 22% !important; } 
+
+            /* Matikan Select, Input text, dan Textarea di dalam tabel checklist... */
+            #checklist-body .save-target { display: none !important; }
+            /* ...lalu nyalakan Div Bayangan sebagai gantinya! */
+            .print-text { display: block !important; }
         }
     </style>
 </head>
@@ -270,9 +306,14 @@
         tbody.innerHTML = tableContent;
 
         // =========================================================================
-        // 3. FITUR AUTO-SAVE (LOCAL STORAGE)
+        // 3. FITUR AUTO-SAVE (LOCAL STORAGE) & AUTO-RESIZE TEXTAREA
         // =========================================================================
         const SESSION_KEY = "Checklist_" + document.title.replace(/\s+/g, '_');
+
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
 
         function saveSession() {
             const data = { inputs: [], images: {} };
@@ -315,10 +356,18 @@
                     }
                 }
             }
+            // Panggil auto-resize untuk semua textarea saat halaman dimuat
+            document.querySelectorAll('textarea').forEach(el => autoResizeTextarea(el));
         }
 
-        // Simpan otomatis saat mengetik atau memilih opsi
-        document.addEventListener('input', saveSession);
+        // Simpan otomatis saat mengetik atau memilih opsi, serta me-resize textarea
+        document.addEventListener('input', function(event) {
+            if (event.target.tagName.toLowerCase() === 'textarea') {
+                autoResizeTextarea(event.target);
+            }
+            saveSession();
+        });
+
         document.addEventListener('change', saveSession);
         window.onload = loadSession; // Muat data saat web dibuka
 
@@ -328,7 +377,9 @@
         function exportSession() {
             saveSession(); // Pastikan data terbaru tersimpan
             const stored = localStorage.getItem(SESSION_KEY);
-            if (!stored) return alert("Belum ada data untuk diexport!");
+            if (!stored || JSON.parse(stored).inputs.every(val => val === "")) {
+                return alert("Belum ada data untuk diexport!");
+            }
 
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(stored);
             const downloadAnchorNode = document.createElement('a');
@@ -361,10 +412,33 @@
         }
 
         // =========================================================================
-        // 5. FITUR VALIDASI SEBELUM CETAK
+        // 5. FITUR VALIDASI SEBELUM CETAK & DIV BAYANGAN
         // =========================================================================
         function validateAndPrint() {
             let isValid = true;
+
+            // --- TRIK JITU: Buat div bayangan khusus untuk print (Berlaku untuk Jawaban & Deskripsi) ---
+            document.querySelectorAll('#checklist-body .save-target').forEach(el => {
+                let printDiv = el.nextElementSibling;
+                // Jika belum ada div bayangan, buat elemen baru
+                if (!printDiv || !printDiv.classList.contains('print-text')) {
+                    printDiv = document.createElement('div');
+                    printDiv.className = 'print-text';
+                    el.parentNode.insertBefore(printDiv, el.nextSibling);
+                }
+                
+                // Ambil nilai text (Khusus <select>, ambil label teksnya, bukan valuenya saja)
+                let textValue = el.value;
+                if (el.tagName.toLowerCase() === 'select' && el.selectedIndex > -1) {
+                    textValue = el.options[el.selectedIndex].text;
+                    if (el.value === "") textValue = ""; // Hilangkan tulisan "- Pilih Status -" jika tidak diisi
+                }
+                
+                printDiv.textContent = textValue || "\u00A0"; // \u00A0 agar spasi kosong tetap membentuk bentuk kotak
+            });
+
+            // Pastikan textarea non-tabel (catatan, dll) juga menyesuaikan ukurannya sebelum cetak
+            document.querySelectorAll('textarea').forEach(el => autoResizeTextarea(el));
 
             // Cek semua text, select, textarea yang harus diisi
             document.querySelectorAll('.save-target, input[type="date"]').forEach(el => {
