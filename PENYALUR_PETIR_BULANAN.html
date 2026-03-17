@@ -3,161 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Penyalur Petir Bulanan</title>
-    <style>
-        /* Pengaturan Dasar Layar */
-        body { font-family: Arial, sans-serif; margin: 20px; font-size: 12px; }
-        
-        /* Layout Header & Logo */
-        .header-container {
-            display: flex; align-items: center; justify-content: center;
-            position: relative;
-            margin-bottom: 40px; /* <--- Ini untuk memberi Jarak/Spasi ke bawah dengan info tabel */
-        }
-        .logo-wrapper { position: absolute; left: 0; top: 0; }
-        .logo-img { max-height: 60px; max-width: 180px; object-fit: contain; }
-        
-        h2 { text-align: center; margin: 0; }
-        
-        /* Layout Tabel Informasi */
-        .header-info { width: 100%; margin-bottom: 15px; }
-        .header-info td { padding: 4px; border: none; }
-        
-        /* Layout Tabel Checklist */
-        table.checklist { width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; word-wrap: break-word;}
-        table.checklist, table.checklist th, table.checklist td { border: 1px solid black; }
-        table.checklist th, table.checklist td { padding: 8px; vertical-align: middle; }
-        table.checklist th { background-color: #f2f2f2; text-align: center; }
-        
-        /* Layout Tabel Catatan (Di Luar Tabel Utama) */
-        table.notes-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-        table.notes-table td { padding: 5px; vertical-align: top; border: none; }
-        .notes-label { width: 15%; font-weight: bold; }
-        .notes-colon { width: 2%; text-align: center; font-weight: bold; }
-        .notes-input { width: 83%; }
-        
-        /* Input Dasar */
-        input[type="text"], input[type="date"], select, textarea {
-            width: 100%; box-sizing: border-box; padding: 5px;
-            font-family: inherit; font-size: inherit; border: 1px solid #ccc; border-radius: 3px;
-        }
-
-        /* Tampilan Textarea di Layar */
-        textarea {
-            resize: none; 
-            overflow: hidden; 
-            white-space: pre-wrap; 
-            word-wrap: break-word; 
-            min-height: 35px; 
-        }
-
-        /* Elemen Bayangan Khusus untuk Print (Jawaban & Deskripsi) */
-        .print-text {
-            display: none; /* Sembunyikan di layar normal */
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            padding: 2px 0;
-            font-family: inherit;
-            font-size: inherit;
-        }
-
-        .file-input { margin-bottom: 5px; font-size: 11px; width: 100%; }
-
-        /* Highlight Merah untuk Field Kosong (Validasi) */
-        .error-field { border: 2px solid #dc3545 !important; background-color: #fff0f0 !important; }
-        .error-img { border: 2px dashed #dc3545 !important; padding: 5px; border-radius: 5px; background-color: #fff0f0; }
-
-        /* Wrapper Gambar & Tombol Hapus */
-        .img-container { min-height: 30px; }
-        .img-wrapper { position: relative; display: inline-block; margin-top: 5px; }
-        .preview-img { max-width: 140px; height: auto; display: none; border: 1px solid #ccc; }
-        .btn-remove {
-            position: absolute; top: -5px; right: -5px;
-            background: #dc3545; color: white; border: none; border-radius: 50%;
-            width: 20px; height: 20px; font-size: 12px; font-weight: bold;
-            cursor: pointer; display: none; line-height: 18px; text-align: center; padding: 0;
-        }
-        .btn-remove:hover { background: #c82333; }
-
-        /* Pengaturan Tanda Tangan */
-        .signature-table { width: 100%; border: none; margin-top: 30px; text-align: center; }
-        .signature-table td { border: none; padding: 10px; }
-        .input-inline {
-            border: none; border-bottom: 1px dashed #000; background: transparent;
-            font-family: inherit; font-size: inherit; text-align: center; padding: 2px;
-        }
-        .input-inline.bold { font-weight: bold; border-bottom: 1px solid #000; width: 80%; }
-        .input-inline.normal { border-bottom: none; width: 80%; }
-
-        /* ================= TATA LETAK TOMBOL ================= */
-        /* Tombol Eksekusi (Kanan Bawah) */
-        .btn-print {
-            position: fixed; bottom: 20px; right: 20px; padding: 12px 20px;
-            background-color: #0d6efd; color: white; border: none; border-radius: 5px;
-            font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 1000;
-        }
-        .btn-print:hover { background-color: #0b5ed7; }
-        
-        .btn-reset {
-            position: fixed; bottom: 75px; right: 20px; padding: 10px 20px;
-            background-color: #6c757d; color: white; border: none; border-radius: 5px;
-            font-size: 13px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 1000;
-        }
-        .btn-reset:hover { background-color: #5a6268; }
-
-        /* Tombol Pindah Sesi (Kiri Bawah) */
-        .btn-export {
-            position: fixed; bottom: 20px; left: 20px; padding: 10px 15px;
-            background-color: #198754; color: white; border: none; border-radius: 5px;
-            font-size: 13px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 1000;
-        }
-        .btn-export:hover { background-color: #157347; }
-        
-        .btn-import {
-            position: fixed; bottom: 65px; left: 20px; padding: 10px 15px;
-            background-color: #fd7e14; color: white; border: none; border-radius: 5px;
-            font-size: 13px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 1000;
-        }
-        .btn-import:hover { background-color: #e37112; }
-
-        /* PENGATURAN CETAK (PRINT) */
-        @media print {
-            body { margin: 0; }
-            .no-print { display: none !important; }
-            
-            /* Sembunyikan styling kotak pada tabel info atas */
-            .header-info input[type="text"], .header-info input[type="date"], .input-inline {
-                border: none !important; background: transparent !important;
-                appearance: none; -webkit-appearance: none; padding: 0; margin: 0;
-                color: black;
-            }
-
-            .error-field { background-color: transparent !important; border: none !important; }
-            .error-img { border: none !important; background-color: transparent !important; padding: 0; }
-            select { background-image: none !important; }
-            ::-ms-expand { display: none; }
-            @page { size: A4; margin: 10mm; }
-
-            /* Paksa tabel tidak meluber */
-            table.checklist { width: 100% !important; table-layout: fixed !important; }
-            table.checklist th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            table.checklist td { word-wrap: break-word !important; }
-
-            /* Mengecilkan Tolak Ukur (kolom 3) dan memperbesar Jawaban (kolom 4) */
-            table.checklist th:nth-child(3) { width: 18% !important; } 
-            table.checklist th:nth-child(4) { width: 22% !important; } 
-
-            /* Matikan Select, Input text, dan Textarea di dalam tabel checklist... */
-            #checklist-body .save-target { display: none !important; }
-            /* ...lalu nyalakan Div Bayangan sebagai gantinya! */
-            .print-text { display: block !important; }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
-
     <button class="btn-print no-print" onclick="validateAndPrint()">🖨️ Cetak PDF</button>
     <button class="btn-reset no-print" onclick="resetForm()">🔄 Mulai Baru</button>
-
     <button class="btn-export no-print" onclick="exportSession()">💾 Simpan Sesi (Export)</button>
     <button class="btn-import no-print" onclick="document.getElementById('importFile').click()">📂 Lanjut Sesi (Import)</button>
     <input type="file" id="importFile" accept=".json" style="display: none;" class="no-print" onchange="importSession(event)">
@@ -171,19 +21,15 @@
 
     <table class="header-info">
         <tr>
-            <td width="150">TANGGAL</td>
-            <td>:</td>
-            <td><input type="date" value="2025-05-13" style="border:1px solid #ccc; font-family:inherit; padding:4px; width:100%;" class="save-target"></td>
-            <td width="150">LOKASI GEDUNG</td>
-            <td width="10">:</td>
+            <td width="150">TANGGAL</td><td>:</td>
+            <td><input type="date" value="2025-05-13" class="save-target"></td>
+            <td width="150">LOKASI GEDUNG</td><td width="10">:</td>
             <td><input type="text" value="......." class="save-target"></td>
         </tr>
         <tr>
-            <td>ID PERANGKAT</td>
-            <td>:</td>
+            <td>ID PERANGKAT</td><td>:</td>
             <td><input type="text" value="........" class="save-target"></td>
-            <td>KODE GEDUNG (SIMA)</td>
-            <td>:</td>
+            <td>KODE GEDUNG (SIMA)</td><td>:</td>
             <td><input type="text" value="...." class="save-target"></td>
         </tr>
     </table>
@@ -191,67 +37,37 @@
     <table class="checklist">
         <thead>
             <tr>
-                <th width="3%">No</th>
-                <th width="22%">Item Checklist</th>
-                <th width="25%">Tolak Ukur</th>
-                <th width="15%">Jawaban</th>
-                <th width="15%">Deskripsi</th>
-                <th width="20%">Foto (Evidence)</th>
+                <th width="3%">No</th><th width="22%">Item Checklist</th><th width="25%">Tolak Ukur</th>
+                <th width="15%">Jawaban</th><th width="15%">Deskripsi</th><th width="20%">Foto (Evidence)</th>
             </tr>
         </thead>
-        <tbody id="checklist-body">
-        </tbody>
+        <tbody id="checklist-body"></tbody>
     </table>
 
     <table class="notes-table">
-        <tr>
-            <td class="notes-label">Catatan</td>
-            <td class="notes-colon">:</td>
-            <td class="notes-input"><textarea rows="2" placeholder="Tuliskan catatan di sini..." class="save-target"></textarea></td>
-        </tr>
-        <tr>
-            <td class="notes-label">Kesimpulan</td>
-            <td class="notes-colon">:</td>
-            <td class="notes-input"><textarea rows="2" placeholder="Tuliskan kesimpulan di sini..." class="save-target"></textarea></td>
-        </tr>
-        <tr>
-            <td class="notes-label">Rekomendasi</td>
-            <td class="notes-colon">:</td>
-            <td class="notes-input"><textarea rows="2" placeholder="Tuliskan rekomendasi di sini..." class="save-target"></textarea></td>
-        </tr>
+        <tr><td class="notes-label">Catatan</td><td class="notes-colon">:</td><td class="notes-input"><textarea rows="2" placeholder="Tuliskan catatan di sini..." class="save-target"></textarea></td></tr>
+        <tr><td class="notes-label">Kesimpulan</td><td class="notes-colon">:</td><td class="notes-input"><textarea rows="2" placeholder="Tuliskan kesimpulan di sini..." class="save-target"></textarea></td></tr>
+        <tr><td class="notes-label">Rekomendasi</td><td class="notes-colon">:</td><td class="notes-input"><textarea rows="2" placeholder="Tuliskan rekomendasi di sini..." class="save-target"></textarea></td></tr>
     </table>
 
     <table class="signature-table">
         <tr>
-            <td width="33%"></td>
-            <td width="33%"></td>
+            <td width="33%"></td><td width="33%"></td>
             <td width="33%">
                 <input type="text" class="input-inline save-target" style="width:80px; text-align:right;" value="Lokasi">, 
-                <input type="text" class="input-inline save-target" style="width:100px;" value="DD MM 2025"><br>
-                Mengetahui / menyetujui,
+                <input type="text" class="input-inline save-target" style="width:100px;" value="DD MM 2025"><br>Mengetahui / menyetujui,
             </td>
         </tr>
+        <tr><td style="height: 60px;"></td><td></td><td></td></tr>
         <tr>
-            <td style="height: 60px;"></td>
+            <td><input type="text" class="input-inline bold save-target" value="Nama"><br><input type="text" class="input-inline normal save-target" value="Posisi"></td>
             <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>
-                <input type="text" class="input-inline bold save-target" value="Nama"><br>
-                <input type="text" class="input-inline normal save-target" value="Posisi">
-            </td>
-            <td></td>
-            <td>
-                <input type="text" class="input-inline bold save-target" value="Nama"><br>
-                <input type="text" class="input-inline normal save-target" value="Teknisi">
-            </td>
+            <td><input type="text" class="input-inline bold save-target" value="Nama"><br><input type="text" class="input-inline normal save-target" value="Teknisi"></td>
         </tr>
     </table>
 
     <script>
-        // --- 1. DATA ITEM CHECKLIST ---
-        const items = [
+        const checklistItems = [
             { id: '1', name: "Kondisi Fisik Air Finial - Roof Top", type: 'radio', options:['Kotor', 'Bersih'], placeholder: 'Besih' },
             { id: '2', name: "Kondisi Fisik Air Finial - Besi tiang ground di sisi kanan depan gedung", type: 'radio', options: ['Runcing', 'Tumpul'] ,placeholder: 'Runcing'},
             { id: '3', name: "Kondisi Fisik Air Finial - Besi tiang ground di sisi kiri depan gedung", type: 'radio', options: ['Runcing', 'Tumpul'] , placeholder: 'Runcing'},
@@ -267,290 +83,7 @@
             { id: '13', name: "Catatan Kesimpulan", type: 'textarea', placeholder: 'Tuliskan Kesimpulan' },
             { id: '14', name: "Catatan Rekomendasi", type: 'textarea', placeholder: 'Tuliskan Rekomendasi' }
         ];
-
-        // --- 2. FUNGSI MERENDER TABEL ---
-        const tbody = document.getElementById('checklist-body');
-        let tableContent = '';
-
-        items.forEach(item => {
-            let jawabanInput = '';
-            if (item.type === 'radio') {
-                jawabanInput = `<select class="save-target"><option value="">- Pilih Status -</option>${item.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}</select>`;
-            } else if (item.type === 'textarea') {
-                jawabanInput = `<textarea rows="2" placeholder="..." class="save-target"></textarea>`;
-            } else {
-                jawabanInput = `<input type="text" placeholder="..." class="save-target">`;
-            }
-
-            tableContent += `
-                <tr>
-                    <td style="text-align: center;">${item.id}</td>
-                    <td>${item.name}</td>
-                    <td>${item.placeholder}</td>
-                    <td>${jawabanInput}</td>
-                    <td><textarea rows="2" placeholder="..." class="save-target"></textarea></td>
-                    <td>
-                        <div class="img-container" id="container_foto${item.id}">
-                            <input type="file" accept="image/*" id="input_foto${item.id}" class="file-input no-print" onchange="previewAndCompressImage(event, 'foto${item.id}')">
-                            <div class="img-wrapper">
-                                <img id="foto${item.id}" class="preview-img">
-                                <button id="btn_foto${item.id}" class="btn-remove no-print" onclick="removeImage('foto${item.id}')">✖</button>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            `;
-        });
-        tbody.innerHTML = tableContent;
-
-        // =========================================================================
-        // 3. FITUR AUTO-SAVE (LOCAL STORAGE) & AUTO-RESIZE TEXTAREA
-        // =========================================================================
-        const SESSION_KEY = "Checklist_" + document.title.replace(/\s+/g, '_');
-
-        function autoResizeTextarea(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = (textarea.scrollHeight) + 'px';
-        }
-
-        function saveSession() {
-            const data = { inputs: [], images: {} };
-            
-            document.querySelectorAll('.save-target, input[type="date"]').forEach(el => {
-                data.inputs.push(el.value);
-            });
-
-            document.querySelectorAll('.preview-img').forEach(img => {
-                if (img.src && img.style.display === 'block') {
-                    data.images[img.id] = { src: img.src, fileKey: img.getAttribute('data-filekey') };
-                }
-            });
-            localStorage.setItem(SESSION_KEY, JSON.stringify(data));
-        }
-
-        function loadSession() {
-            const stored = localStorage.getItem(SESSION_KEY);
-            if (stored) {
-                const data = JSON.parse(stored);
-                
-                document.querySelectorAll('.save-target, input[type="date"]').forEach((el, index) => {
-                    if (data.inputs[index] !== undefined) el.value = data.inputs[index];
-                });
-
-                for (let id in data.images) {
-                    let imgInfo = data.images[id];
-                    let imgElement = document.getElementById(id);
-                    let btnElement = document.getElementById("btn_" + id);
-                    let inputElement = document.getElementById("input_" + id);
-
-                    if (imgElement && imgInfo.src) {
-                        imgElement.src = imgInfo.src;
-                        imgElement.style.display = 'block';
-                        imgElement.setAttribute("data-filekey", imgInfo.fileKey);
-                        uploadedFiles.add(imgInfo.fileKey); 
-                        
-                        if (btnElement) btnElement.style.display = 'block';
-                        if (inputElement) inputElement.style.display = 'none';
-                    }
-                }
-            }
-            // Panggil auto-resize untuk semua textarea saat halaman dimuat
-            document.querySelectorAll('textarea').forEach(el => autoResizeTextarea(el));
-        }
-
-        // Simpan otomatis saat mengetik atau memilih opsi, serta me-resize textarea
-        document.addEventListener('input', function(event) {
-            if (event.target.tagName.toLowerCase() === 'textarea') {
-                autoResizeTextarea(event.target);
-            }
-            saveSession();
-        });
-
-        document.addEventListener('change', saveSession);
-        window.onload = loadSession; // Muat data saat web dibuka
-
-        // =========================================================================
-        // 4. FITUR EXPORT & IMPORT (PINDAH DEVICE)
-        // =========================================================================
-        function exportSession() {
-            saveSession(); // Pastikan data terbaru tersimpan
-            const stored = localStorage.getItem(SESSION_KEY);
-            if (!stored || JSON.parse(stored).inputs.every(val => val === "")) {
-                return alert("Belum ada data untuk diexport!");
-            }
-
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(stored);
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", SESSION_KEY + "_Export.json");
-            document.body.appendChild(downloadAnchorNode); 
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-        }
-
-        function importSession(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    // Cek validitas JSON
-                    JSON.parse(e.target.result); 
-                    // Timpa local storage dengan file yang diupload
-                    localStorage.setItem(SESSION_KEY, e.target.result);
-                    alert("✅ Sesi berhasil dimuat! Halaman akan dimuat ulang.");
-                    location.reload(); // Refresh halaman agar data baru ter-render
-                } catch(err) {
-                    alert("❌ File sesi tidak valid atau rusak!");
-                }
-                event.target.value = ""; 
-            };
-            reader.readAsText(file);
-        }
-
-        // =========================================================================
-        // 5. FITUR VALIDASI SEBELUM CETAK & DIV BAYANGAN
-        // =========================================================================
-        function validateAndPrint() {
-            let isValid = true;
-
-            // --- TRIK JITU: Buat div bayangan khusus untuk print (Berlaku untuk Jawaban & Deskripsi) ---
-            document.querySelectorAll('#checklist-body .save-target').forEach(el => {
-                let printDiv = el.nextElementSibling;
-                // Jika belum ada div bayangan, buat elemen baru
-                if (!printDiv || !printDiv.classList.contains('print-text')) {
-                    printDiv = document.createElement('div');
-                    printDiv.className = 'print-text';
-                    el.parentNode.insertBefore(printDiv, el.nextSibling);
-                }
-                
-                // Ambil nilai text (Khusus <select>, ambil label teksnya, bukan valuenya saja)
-                let textValue = el.value;
-                if (el.tagName.toLowerCase() === 'select' && el.selectedIndex > -1) {
-                    textValue = el.options[el.selectedIndex].text;
-                    if (el.value === "") textValue = ""; // Hilangkan tulisan "- Pilih Status -" jika tidak diisi
-                }
-                
-                printDiv.textContent = textValue || "\u00A0"; // \u00A0 agar spasi kosong tetap membentuk bentuk kotak
-            });
-
-            // Pastikan textarea non-tabel (catatan, dll) juga menyesuaikan ukurannya sebelum cetak
-            document.querySelectorAll('textarea').forEach(el => autoResizeTextarea(el));
-
-            // Cek semua text, select, textarea yang harus diisi
-            document.querySelectorAll('.save-target, input[type="date"]').forEach(el => {
-                el.classList.remove('error-field'); 
-                if (el.value.trim() === '') {
-                    el.classList.add('error-field');
-                    isValid = false;
-                }
-            });
-
-            // Cek apakah semua foto di item checklist sudah diupload
-            items.forEach(item => {
-                let img = document.getElementById('foto' + item.id);
-                let container = document.getElementById('container_foto' + item.id);
-                if (container) container.classList.remove('error-img');
-
-                if (img && img.style.display !== 'block') {
-                    if (container) container.classList.add('error-img');
-                    isValid = false;
-                }
-            });
-
-            if (isValid) {
-                window.print();
-            } else {
-                alert("⚠️ GAGAL MENCETAK!\n\nHarap isi semua kotak dan unggah semua foto bukti. (Periksa bagian yang ditandai merah).");
-            }
-        }
-
-        // =========================================================================
-        // 6. FITUR RESET FORM
-        // =========================================================================
-        function resetForm() {
-            if (confirm("⚠️ PERINGATAN!\nApakah Anda yakin ingin MENGHAPUS semua isian dan foto untuk memulai inspeksi baru? Data lama tidak bisa dikembalikan kecuali sudah Anda Export.")) {
-                localStorage.removeItem(SESSION_KEY);
-                location.reload(); 
-            }
-        }
-
-        // =========================================================================
-        // 7. FUNGSI KOMPRESI & ANTI DUPLIKAT GAMBAR
-        // =========================================================================
-        let uploadedFiles = new Set();
-
-        function compressImage(file, callback) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = function(event) {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    const MAX_WIDTH = 800; const MAX_HEIGHT = 800;
-                    let width = img.width; let height = img.height;
-
-                    if (width > height) { if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; } } 
-                    else { if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; } }
-
-                    canvas.width = width; canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    callback(canvas.toDataURL('image/jpeg', 0.7));
-                };
-            };
-        }
-
-        function previewAndCompressImage(event, imageId) {
-            var input = event.target;
-            if (input.files && input.files[0]) {
-                var file = input.files[0];
-                var fileKey = file.name + "_" + file.size + "_" + file.lastModified;
-
-                if (uploadedFiles.has(fileKey)) {
-                    alert("⚠️ PERINGATAN: Foto '" + file.name + "' sudah digunakan di item lain!");
-                    input.value = ""; return;
-                }
-
-                compressImage(file, function(compressedData) {
-                    var imgElement = document.getElementById(imageId);
-                    var btnElement = document.getElementById("btn_" + imageId);
-                    
-                    var oldKey = imgElement.getAttribute("data-filekey");
-                    if (oldKey) uploadedFiles.delete(oldKey);
-
-                    uploadedFiles.add(fileKey);
-                    imgElement.setAttribute("data-filekey", fileKey);
-
-                    imgElement.src = compressedData;
-                    imgElement.style.display = 'block';
-                    btnElement.style.display = 'block'; 
-                    input.style.display = 'none'; 
-                    
-                    // Hilangkan border merah jika sedang divalidasi, lalu simpan sesi
-                    document.getElementById('container_' + imageId).classList.remove('error-img');
-                    saveSession(); 
-                });
-            }
-        }
-
-        function removeImage(imageId) {
-            var imgElement = document.getElementById(imageId);
-            var btnElement = document.getElementById("btn_" + imageId);
-            var inputElement = document.getElementById("input_" + imageId);
-
-            var fileKey = imgElement.getAttribute("data-filekey");
-            if (fileKey) {
-                uploadedFiles.delete(fileKey);
-                imgElement.removeAttribute("data-filekey");
-            }
-
-            imgElement.src = ""; imgElement.style.display = 'none'; btnElement.style.display = 'none'; 
-            inputElement.value = ""; inputElement.style.display = 'block'; 
-            saveSession(); 
-        }
     </script>
+    <script src="script.js"></script>
 </body>
 </html>
