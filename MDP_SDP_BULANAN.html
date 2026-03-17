@@ -36,10 +36,30 @@
         .notes-input { width: 83%; }
 
         /* Input Dasar */
-        input[type="text"], select, textarea {
+        input[type="text"], input[type="date"], select, textarea {
             width: 100%; box-sizing: border-box; padding: 5px;
-            font-family: inherit; font-size: inherit; border: 1px solid #ccc;
+            font-family: inherit; font-size: inherit; border: 1px solid #ccc; border-radius: 3px;
         }
+
+        /* Tampilan Textarea di Layar */
+        textarea {
+            resize: none; 
+            overflow: hidden; 
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+            min-height: 35px; 
+        }
+
+        /* Elemen Bayangan Khusus untuk Print (Jawaban & Deskripsi) */
+        .print-text {
+            display: none; /* Sembunyikan di layar normal */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            padding: 2px 0;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
         .file-input { margin-bottom: 5px; font-size: 11px; width: 100%; }
 
         /* Highlight Merah untuk Field Kosong (Validasi) */
@@ -47,6 +67,7 @@
         .error-img { border: 2px dashed #dc3545 !important; padding: 5px; border-radius: 5px; background-color: #fff0f0; }        
         
         /* Wrapper Gambar & Tombol Hapus */
+        .img-container { min-height: 30px; }
         .img-wrapper { position: relative; display: inline-block; margin-top: 5px; }
         .preview-img { max-width: 140px; height: auto; display: none; border: 1px solid #ccc; }
         .btn-remove {
@@ -67,8 +88,7 @@
         .input-inline.bold { font-weight: bold; border-bottom: 1px solid #000; width: 80%; }
         .input-inline.normal { border-bottom: none; width: 80%; }
 
-/* ================= TATA LETAK TOMBOL ================= */
-        /* Tombol Eksekusi (Kanan Bawah) */
+        /* ================= TATA LETAK TOMBOL ================= */
         .btn-print {
             position: fixed; bottom: 20px; right: 20px; padding: 12px 20px;
             background-color: #0d6efd; color: white; border: none; border-radius: 5px;
@@ -83,7 +103,6 @@
         }
         .btn-reset:hover { background-color: #5a6268; }
 
-        /* Tombol Pindah Sesi (Kiri Bawah) */
         .btn-export {
             position: fixed; bottom: 20px; left: 20px; padding: 10px 15px;
             background-color: #198754; color: white; border: none; border-radius: 5px;
@@ -102,21 +121,39 @@
         @media print {
             body { margin: 0; }
             .no-print { display: none !important; }
-            input[type="text"], select, textarea, .input-inline {
+            
+            /* Sembunyikan styling kotak pada tabel info atas */
+            .header-info input[type="text"], .header-info input[type="date"], .input-inline {
                 border: none !important; background: transparent !important;
                 appearance: none; -webkit-appearance: none; padding: 0; margin: 0;
-                color: black; resize: none;
+                color: black;
             }
+
+            .error-field { background-color: transparent !important; border: none !important; }
+            .error-img { border: none !important; background-color: transparent !important; padding: 0; }
             select { background-image: none !important; }
             ::-ms-expand { display: none; }
-            table.checklist th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             @page { size: A4; margin: 10mm; }
+
+            /* Paksa tabel tidak meluber */
+            table.checklist { width: 100% !important; table-layout: fixed !important; }
+            table.checklist th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            table.checklist td { word-wrap: break-word !important; }
+
+            /* Mengecilkan Tolak Ukur (kolom 3) dan memperbesar Jawaban (kolom 4) */
+            table.checklist th:nth-child(3) { width: 18% !important; } 
+            table.checklist th:nth-child(4) { width: 22% !important; } 
+
+            /* Matikan Select, Input text, dan Textarea di dalam tabel checklist... */
+            #checklist-body .save-target { display: none !important; }
+            /* ...lalu nyalakan Div Bayangan sebagai gantinya! */
+            .print-text { display: block !important; }
         }
     </style>
 </head>
 <body>
 
-<button class="btn-print no-print" onclick="validateAndPrint()">🖨️ Cetak PDF</button>
+    <button class="btn-print no-print" onclick="validateAndPrint()">🖨️ Cetak PDF</button>
     <button class="btn-reset no-print" onclick="resetForm()">🔄 Mulai Baru</button>
 
     <button class="btn-export no-print" onclick="exportSession()">💾 Simpan Sesi (Export)</button>
@@ -134,20 +171,19 @@
         <tr>
             <td width="150">TANGGAL</td>
             <td>:</td>
-            <td><input type="date" value="2025-05-13" style="border:1px solid #ccc; font-family:inherit; padding:4px; width:100%;"></td>
+            <td><input type="date" value="2025-05-13" style="border:1px solid #ccc; font-family:inherit; padding:4px; width:100%;" class="save-target"></td>
             <td width="150">LOKASI GEDUNG</td>
             <td width="10">:</td>
-            <td><input type="text" value="......."></td>
+            <td><input type="text" value="......." class="save-target"></td>
         </tr>
         <tr>
             <td>ID PERANGKAT</td>
             <td>:</td>
-            <td><input type="text" value="........"></td>
+            <td><input type="text" value="........" class="save-target"></td>
             <td>KODE GEDUNG (SIMA)</td>
             <td>:</td>
-            <td><input type="text" value="...."></td>
+            <td><input type="text" value="...." class="save-target"></td>
         </tr>
-
     </table>
 
     <table class="checklist">
@@ -169,17 +205,17 @@
         <tr>
             <td class="notes-label">Catatan</td>
             <td class="notes-colon">:</td>
-            <td class="notes-input"><textarea rows="2" placeholder="Tuliskan catatan di sini..."></textarea></td>
+            <td class="notes-input"><textarea rows="2" placeholder="Tuliskan catatan di sini..." class="save-target"></textarea></td>
         </tr>
         <tr>
             <td class="notes-label">Kesimpulan</td>
             <td class="notes-colon">:</td>
-            <td class="notes-input"><textarea rows="2" placeholder="Tuliskan kesimpulan di sini..."></textarea></td>
+            <td class="notes-input"><textarea rows="2" placeholder="Tuliskan kesimpulan di sini..." class="save-target"></textarea></td>
         </tr>
         <tr>
             <td class="notes-label">Rekomendasi</td>
             <td class="notes-colon">:</td>
-            <td class="notes-input"><textarea rows="2" placeholder="Tuliskan rekomendasi di sini..."></textarea></td>
+            <td class="notes-input"><textarea rows="2" placeholder="Tuliskan rekomendasi di sini..." class="save-target"></textarea></td>
         </tr>
     </table>
 
@@ -188,8 +224,8 @@
             <td width="33%"></td>
             <td width="33%"></td>
             <td width="33%">
-                <input type="text" class="input-inline" style="width:80px; text-align:right;" value="Lokasi">, 
-                <input type="text" class="input-inline" style="width:100px;" value="DD MM 2025"><br>
+                <input type="text" class="input-inline save-target" style="width:80px; text-align:right;" value="Lokasi">, 
+                <input type="text" class="input-inline save-target" style="width:100px;" value="DD MM 2025"><br>
                 Mengetahui / menyetujui,
             </td>
         </tr>
@@ -200,13 +236,13 @@
         </tr>
         <tr>
             <td>
-                <input type="text" class="input-inline bold" value="Nama"><br>
-                <input type="text" class="input-inline normal" value="Posisi">
+                <input type="text" class="input-inline bold save-target" value="Nama"><br>
+                <input type="text" class="input-inline normal save-target" value="Posisi">
             </td>
             <td></td>
             <td>
-                <input type="text" class="input-inline bold" value="Nama"><br>
-                <input type="text" class="input-inline normal" value="Teknisi">
+                <input type="text" class="input-inline bold save-target" value="Nama"><br>
+                <input type="text" class="input-inline normal save-target" value="Teknisi">
             </td>
         </tr>
     </table>
@@ -234,11 +270,11 @@
         items.forEach(item => {
             let jawabanInput = '';
             if (item.type === 'radio') {
-                jawabanInput = `<select><option value="">- Pilih Status -</option>${item.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}</select>`;
+                jawabanInput = `<select class="save-target"><option value="">- Pilih Status -</option>${item.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}</select>`;
             } else if (item.type === 'textarea') {
-                jawabanInput = `<textarea rows="2" placeholder="..."></textarea>`;
+                jawabanInput = `<textarea rows="2" placeholder="..." class="save-target"></textarea>`;
             } else {
-                jawabanInput = `<input type="text" placeholder="...">`;
+                jawabanInput = `<input type="text" placeholder="..." class="save-target">`;
             }
 
             tableContent += `
@@ -247,12 +283,14 @@
                     <td>${item.name}</td>
                     <td>${item.placeholder}</td>
                     <td>${jawabanInput}</td>
-                    <td><textarea rows="2" placeholder="..."></textarea></td>
+                    <td><textarea rows="2" placeholder="..." class="save-target"></textarea></td>
                     <td>
-                        <input type="file" accept="image/*" id="input_foto${item.id}" class="file-input no-print" onchange="previewAndCompressImage(event, 'foto${item.id}')">
-                        <div class="img-wrapper">
-                            <img id="foto${item.id}" class="preview-img">
-                            <button id="btn_foto${item.id}" class="btn-remove no-print" onclick="removeImage('foto${item.id}')">✖</button>
+                        <div class="img-container" id="container_foto${item.id}">
+                            <input type="file" accept="image/*" id="input_foto${item.id}" class="file-input no-print" onchange="previewAndCompressImage(event, 'foto${item.id}')">
+                            <div class="img-wrapper">
+                                <img id="foto${item.id}" class="preview-img">
+                                <button id="btn_foto${item.id}" class="btn-remove no-print" onclick="removeImage('foto${item.id}')">✖</button>
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -260,10 +298,15 @@
         });
         tbody.innerHTML = tableContent;
 
-// =========================================================================
-        // 3. FITUR AUTO-SAVE (LOCAL STORAGE)
+        // =========================================================================
+        // 3. FITUR AUTO-SAVE (LOCAL STORAGE) & AUTO-RESIZE TEXTAREA
         // =========================================================================
         const SESSION_KEY = "Checklist_" + document.title.replace(/\s+/g, '_');
+
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
 
         function saveSession() {
             const data = { inputs: [], images: {} };
@@ -306,20 +349,29 @@
                     }
                 }
             }
+            // Panggil auto-resize untuk semua textarea saat halaman dimuat
+            document.querySelectorAll('textarea').forEach(el => autoResizeTextarea(el));
         }
 
-        // Simpan otomatis saat mengetik atau memilih opsi
-        document.addEventListener('input', saveSession);
+        document.addEventListener('input', function(event) {
+            if (event.target.tagName.toLowerCase() === 'textarea') {
+                autoResizeTextarea(event.target);
+            }
+            saveSession();
+        });
+
         document.addEventListener('change', saveSession);
-        window.onload = loadSession; // Muat data saat web dibuka
+        window.onload = loadSession;
 
         // =========================================================================
         // 4. FITUR EXPORT & IMPORT (PINDAH DEVICE)
         // =========================================================================
         function exportSession() {
-            saveSession(); // Pastikan data terbaru tersimpan
+            saveSession(); 
             const stored = localStorage.getItem(SESSION_KEY);
-            if (!stored) return alert("Belum ada data untuk diexport!");
+            if (!stored || JSON.parse(stored).inputs.every(val => val === "")) {
+                return alert("Belum ada data untuk diexport!");
+            }
 
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(stored);
             const downloadAnchorNode = document.createElement('a');
@@ -337,12 +389,10 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    // Cek validitas JSON
                     JSON.parse(e.target.result); 
-                    // Timpa local storage dengan file yang diupload
                     localStorage.setItem(SESSION_KEY, e.target.result);
                     alert("✅ Sesi berhasil dimuat! Halaman akan dimuat ulang.");
-                    location.reload(); // Refresh halaman agar data baru ter-render
+                    location.reload(); 
                 } catch(err) {
                     alert("❌ File sesi tidak valid atau rusak!");
                 }
@@ -352,12 +402,34 @@
         }
 
         // =========================================================================
-        // 5. FITUR VALIDASI SEBELUM CETAK
+        // 5. FITUR VALIDASI SEBELUM CETAK & DIV BAYANGAN
         // =========================================================================
         function validateAndPrint() {
             let isValid = true;
 
-            // Cek semua text, select, textarea yang harus diisi
+            // --- TRIK JITU: Buat div bayangan khusus untuk print (Berlaku untuk Jawaban & Deskripsi) ---
+            document.querySelectorAll('#checklist-body .save-target').forEach(el => {
+                let printDiv = el.nextElementSibling;
+                // Jika belum ada div bayangan, buat elemen baru
+                if (!printDiv || !printDiv.classList.contains('print-text')) {
+                    printDiv = document.createElement('div');
+                    printDiv.className = 'print-text';
+                    el.parentNode.insertBefore(printDiv, el.nextSibling);
+                }
+                
+                // Ambil nilai text (Khusus <select>, ambil label teksnya, bukan valuenya saja)
+                let textValue = el.value;
+                if (el.tagName.toLowerCase() === 'select' && el.selectedIndex > -1) {
+                    textValue = el.options[el.selectedIndex].text;
+                    if (el.value === "") textValue = ""; // Hilangkan tulisan "- Pilih Status -" jika tidak diisi
+                }
+                
+                printDiv.textContent = textValue || "\u00A0"; // \u00A0 agar spasi kosong tetap membentuk bentuk kotak
+            });
+
+            // Pastikan textarea non-tabel (catatan, dll) juga menyesuaikan ukurannya sebelum cetak
+            document.querySelectorAll('textarea').forEach(el => autoResizeTextarea(el));
+
             document.querySelectorAll('.save-target, input[type="date"]').forEach(el => {
                 el.classList.remove('error-field'); 
                 if (el.value.trim() === '') {
@@ -366,7 +438,6 @@
                 }
             });
 
-            // Cek apakah semua foto di item checklist sudah diupload
             items.forEach(item => {
                 let img = document.getElementById('foto' + item.id);
                 let container = document.getElementById('container_foto' + item.id);
@@ -448,7 +519,6 @@
                     btnElement.style.display = 'block'; 
                     input.style.display = 'none'; 
                     
-                    // Hilangkan border merah jika sedang divalidasi, lalu simpan sesi
                     document.getElementById('container_' + imageId).classList.remove('error-img');
                     saveSession(); 
                 });
